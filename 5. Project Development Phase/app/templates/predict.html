@@ -1,0 +1,334 @@
+<!-- templates/predict.html -->
+{% extends "base.html" %} {% block title %} New Credit Application {% endblock
+%} {% block content %}
+
+<section class="application-page">
+  <div class="application-banner">
+    <div class="banner-content">
+      <span class="banner-chip"> Credit Risk Assessment Portal </span>
+
+      <h2>
+        New Credit Card
+        <br />
+        Application Screening
+      </h2>
+
+      <p>
+        Complete the applicant profile below to begin an automated credit risk
+        assessment. The system validates mandatory eligibility rules before
+        performing an explainable machine learning risk analysis.
+      </p>
+    </div>
+
+    <div class="banner-summary">
+      <div class="summary-box">
+        <h3>Screening Pipeline</h3>
+
+        <div class="summary-step">
+          <span>01</span>
+          <p>Applicant Information</p>
+        </div>
+
+        <div class="summary-step">
+          <span>02</span>
+          <p>Rule Validation</p>
+        </div>
+
+        <div class="summary-step">
+          <span>03</span>
+          <p>ML Risk Prediction</p>
+        </div>
+
+        <div class="summary-step">
+          <span>04</span>
+          <p>Decision Explanation</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form action="{{ url_for('predict') }}" method="POST" class="credit-form">
+    <!-- ================= PERSONAL DETAILS ================= -->
+    <div class="form-card">
+      <div class="card-header">
+        <div>
+          <span class="section-number"> SECTION 01 </span>
+          <h3>Personal Information</h3>
+        </div>
+        <div class="section-icon">👤</div>
+      </div>
+
+      <div class="modern-grid">
+        <div class="input-box">
+          <label for="gender"> Gender </label>
+          <select name="gender" id="gender" required>
+            <option value="F">Female</option>
+            <option value="M">Male</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="age"> Applicant Age </label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            min="1"
+            max="120"
+            placeholder="Enter age"
+            required
+          />
+        </div>
+
+        <div class="input-box">
+          <label for="family_status"> Marital Status </label>
+          <select name="family_status" id="family_status" required>
+            {% for opt in family_statuses %}
+            <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="family_members"> Family Members </label>
+          <input
+            type="number"
+            id="family_members"
+            name="family_members"
+            min="1"
+            value="1"
+            required
+          />
+        </div>
+
+        <div class="input-box">
+          <label for="children"> Number of Children </label>
+          <input
+            type="number"
+            id="children"
+            name="children"
+            min="0"
+            value="0"
+            required
+          />
+        </div>
+
+        <div class="input-box">
+          <label for="housing_type"> Housing Category </label>
+          <select id="housing_type" name="housing_type" required>
+            {% for opt in housing_types %}
+            <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= EMPLOYMENT ================= -->
+    <div class="form-card">
+      <div class="card-header">
+        <div>
+          <span class="section-number"> SECTION 02 </span>
+          <h3>Employment & Financial Information</h3>
+        </div>
+        <div class="section-icon">💼</div>
+      </div>
+
+      <div class="modern-grid">
+        <div class="input-box">
+          <label for="income"> Annual Income (₹) </label>
+          <input
+            type="number"
+            id="income"
+            name="income"
+            min="0"
+            step="1000"
+            placeholder="Annual income"
+            required
+          />
+          <small class="input-note">
+            Income must be greater than ₹0 to pass rule validation.
+          </small>
+        </div>
+
+        <div class="input-box">
+          <label for="income_type"> Income Source </label>
+          <select id="income_type" name="income_type" required>
+            {% for opt in income_types %}
+            <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="occupation"> Occupation </label>
+          <select id="occupation" name="occupation" required>
+            {% for opt in occupation_types %}
+            <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="years_employed"> Years Employed </label>
+          <input
+            type="number"
+            id="years_employed"
+            name="years_employed"
+            min="0"
+            step="0.1"
+            value="0"
+            required
+          />
+        </div>
+
+        <div class="input-box">
+          <label for="education"> Education Level </label>
+          <select id="education" name="education" required>
+            {% for opt in education_types %}
+            <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="own_car"> Vehicle Ownership </label>
+          <select id="own_car" name="own_car" required>
+            <option value="N">No</option>
+            <option value="Y">Yes</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="own_realty"> Property Ownership </label>
+          <select id="own_realty" name="own_realty" required>
+            <option value="Y">Yes</option>
+            <option value="N">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CONTACT INFORMATION ================= -->
+    <div class="form-card">
+      <div class="card-header">
+        <div>
+          <span class="section-number"> SECTION 03 </span>
+          <h3>Contact Verification</h3>
+        </div>
+        <div class="section-icon">📞</div>
+      </div>
+
+      <p class="section-description">
+        Select every communication channel currently available for this
+        applicant.
+      </p>
+
+      <div class="contact-selection">
+        <label class="contact-card">
+          <input type="checkbox" name="work_phone" value="1" />
+          <div>
+            <h4>Work Phone</h4>
+            <span> Office contact available </span>
+          </div>
+        </label>
+
+        <label class="contact-card">
+          <input type="checkbox" name="phone" value="1" />
+          <div>
+            <h4>Personal Phone</h4>
+            <span> Mobile number verified </span>
+          </div>
+        </label>
+
+        <label class="contact-card">
+          <input type="checkbox" name="email" value="1" />
+          <div>
+            <h4>Email Address</h4>
+            <span> Email available for communication </span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- ================= REVIEW PANEL ================= -->
+    <div class="review-panel">
+      <div class="review-card">
+        <h3>Before You Continue</h3>
+        <ul>
+          <li>Verify that all applicant details are accurate.</li>
+          <li>Ensure annual income reflects current earnings.</li>
+          <li>
+            Employment years should be entered as 0 for unemployed applicants.
+          </li>
+          <li>
+            The prediction is intended to assist analysts and does not replace
+            institutional lending policy.
+          </li>
+        </ul>
+      </div>
+
+      <div class="action-card">
+        <h3>Ready for Assessment?</h3>
+        <p>
+          Click the button below to perform rule validation, machine learning
+          prediction and explainable risk analysis for this application.
+        </p>
+        <button type="submit" class="predict-button">
+          Run Credit Risk Assessment
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- ================= INFORMATION STRIP ================= -->
+  <section class="information-strip">
+    <div class="info-card">
+      <div class="info-icon">✓</div>
+      <div>
+        <h4>Rule Validation</h4>
+        <p>
+          Every application is validated against mandatory eligibility rules
+          before prediction begins.
+        </p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">AI</div>
+      <div>
+        <h4>Explainable Machine Learning</h4>
+        <p>
+          Predictions are generated using an optimized XGBoost model together
+          with SHAP explanations.
+        </p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">⚡</div>
+      <div>
+        <h4>Analyst Assistance</h4>
+        <p>
+          The generated result supports lending analysts and should always be
+          reviewed alongside institutional credit policies.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="system-disclaimer disclaimer-box">
+    <div>
+      <h3>Important Notice</h3>
+      <p>
+        This application provides an estimated credit risk based on historical
+        applicant behaviour using machine learning and deterministic business
+        rules. The generated recommendation is intended to assist human
+        decision-makers and should not be considered an automatic approval or
+        rejection of any credit application.
+      </p>
+    </div>
+  </section>
+</section>
+
+{% endblock %}

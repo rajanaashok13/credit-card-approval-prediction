@@ -1,0 +1,224 @@
+<!-- templates/result.html -->
+{% extends "base.html" %} {% block title %} Application Result {% endblock %} {%
+block content %}
+
+<section class="result-dashboard">
+  {% if form_errors %}
+
+  <div class="status-banner error-banner">
+    <div class="status-icon">⚠</div>
+    <div>
+      <span class="status-label">INPUT VALIDATION</span>
+      <h2>Some information requires correction</h2>
+      <p>
+        The application could not be processed because one or more required
+        values are invalid. Please review the following issues before submitting
+        again.
+      </p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="card-title">
+      <h3>Validation Report</h3>
+    </div>
+    <div class="issue-list">
+      {% for err in form_errors %}
+      <div class="issue-item">
+        <div class="issue-dot"></div>
+        <span>{{ err }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="action-panel">
+    <a href="{{ url_for('predict_form') }}" class="primary-action">
+      Return to Application
+    </a>
+  </div>
+
+  {% elif source == "rules" %}
+
+  <div class="status-banner decline-banner">
+    <div class="status-icon">⛔</div>
+    <div>
+      <span class="status-label">RULE ENGINE DECISION</span>
+      <h2>Application Stopped During Eligibility Screening</h2>
+      <p>
+        The submitted application failed one or more mandatory business rules
+        before machine learning prediction began.
+      </p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="card-title">
+      <h3>Eligibility Findings</h3>
+    </div>
+    <div class="issue-list">
+      {% for reason in reasons %}
+      <div class="issue-item">
+        <div class="issue-dot decline-dot"></div>
+        <span>{{ reason }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="system-note">
+    <h3>Why no ML prediction?</h3>
+    <p>
+      This application violated mandatory eligibility requirements. Since
+      deterministic business rules already determined the outcome, the machine
+      learning model was intentionally skipped. This prevents unnecessary
+      predictions on invalid applications.
+    </p>
+  </div>
+
+  <div class="action-panel">
+    <a href="{{ url_for('predict_form') }}" class="primary-action">
+      Evaluate Another Applicant
+    </a>
+  </div>
+
+  {% else %}
+
+  <div
+    class="status-banner {% if decision == 'review' %}review-banner{% else %}success-banner{% endif %}"
+  >
+    <div class="status-icon">
+      {% if decision == "review" %}⚠{% else %}✓{% endif %}
+    </div>
+    <div>
+      <span class="status-label">MACHINE LEARNING RESULT</span>
+      <h2>
+        {% if decision == "review" %} Manual Review Recommended {% else %}
+        Applicant Cleared for Standard Processing {% endif %}
+      </h2>
+      <p>
+        The applicant successfully passed the rule engine and has been evaluated
+        by the machine learning prediction model.
+      </p>
+    </div>
+  </div>
+
+  <div class="result-summary-grid">
+    <div class="summary-card">
+      <span>Estimated Risk</span>
+      <h1>{{ probability }}%</h1>
+    </div>
+
+    <div class="summary-card">
+      <span>Review Threshold</span>
+      <h1>{{ threshold }}%</h1>
+    </div>
+
+    <div class="summary-card">
+      <span>Risk Category</span>
+      <h1>{{ band|capitalize }}</h1>
+    </div>
+  </div>
+
+  <div class="prediction-card">
+    <div class="prediction-header">
+      <h3>Credit Risk Visualization</h3>
+    </div>
+    <div class="risk-meter">
+      <div class="risk-track">
+        <div
+          class="risk-progress risk-{{ band }}"
+          style="width: {{ probability }}%;"
+        ></div>
+        <div class="risk-threshold" style="left: {{ threshold }}%;"></div>
+      </div>
+      <div class="meter-labels">
+        <span>Applicant Risk <strong>{{ probability }}%</strong></span>
+        <span>Threshold <strong>{{ threshold }}%</strong></span>
+      </div>
+    </div>
+  </div>
+
+  {% if reasons %}
+  <div class="dashboard-card">
+    <div class="card-title">
+      <div>
+        <h3>AI Explanation Summary</h3>
+        <span>SHAP Feature Analysis</span>
+      </div>
+    </div>
+    <div class="reason-grid">
+      {% for reason in reasons %}
+      <div class="reason-card">
+        <div class="reason-icon">AI</div>
+        <div>
+          <h4>Feature Insight</h4>
+          <p>{{ reason }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %} {% if soft_flags %}
+  <div class="dashboard-card">
+    <div class="card-title">
+      <div>
+        <h3>Additional Review Indicators</h3>
+        <span>Analyst Attention Suggested</span>
+      </div>
+    </div>
+    <div class="warning-list">
+      {% for flag in soft_flags %}
+      <div class="warning-item">
+        <div class="warning-icon">!</div>
+        <div>{{ flag }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="recommendation-panel">
+    <div class="recommendation-left">
+      <h3>Final Recommendation</h3>
+      <p>
+        {% if decision == "review" %} The applicant exhibits characteristics
+        associated with an increased probability of credit risk. Manual
+        verification is recommended before proceeding with any lending decision.
+        {% else %} No elevated credit risk was identified based on the supplied
+        information and the trained prediction model. Continue with the
+        institution's standard verification process. {% endif %}
+      </p>
+    </div>
+
+    <div class="recommendation-right">
+      <div class="decision-box">
+        <span>Decision Status</span>
+        <h2>
+          {% if decision == "review" %} REVIEW {% else %} CLEAR {% endif %}
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="system-note">
+    <h3>Important Information</h3>
+    <p>
+      This prediction is generated using historical applicant data, engineered
+      financial features and an explainable machine learning model. The
+      recommendation serves as a decision-support tool only. Final approval or
+      rejection should always be determined by qualified banking professionals
+      following institutional credit policies and regulatory guidelines.
+    </p>
+  </div>
+
+  <div class="action-panel">
+    <a href="{{ url_for('predict_form') }}" class="primary-action">
+      Screen Another Applicant
+    </a>
+  </div>
+
+  {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,198 @@
+<!-- templates/home.html -->
+{% extends "base.html" %} {% block title %} Credit Risk Dashboard {% endblock %}
+{% block content %}
+
+<section class="dashboard-hero hero-banner">
+  <div class="hero-left hero-content">
+    <span class="hero-tag banner-chip">
+      AI Powered Credit Screening Platform
+    </span>
+
+    <h2>
+      Intelligent Credit Card
+      <br />
+      Risk Assessment System
+    </h2>
+
+    <p>
+      Evaluate credit applications using a hybrid approach that combines
+      rule-based eligibility verification with an advanced XGBoost Machine
+      Learning model. Every application is screened, scored and explained before
+      reaching a human analyst.
+    </p>
+
+    <a href="{{ url_for('predict_form') }}" class="primary-btn primary-action">
+      Start New Screening
+    </a>
+  </div>
+
+  <div class="hero-right hero-side">
+    <div class="hero-card hero-panel">
+      <h3 class="card-title">Platform Overview</h3>
+
+      <div class="status-circle nav-mark" style="margin-bottom: 15px">AI</div>
+
+      <h3>Credit Intelligence</h3>
+      <p>
+        Combining deterministic eligibility rules with explainable machine
+        learning for reliable applicant screening.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="stats-grid metric-grid">
+  <div class="stat-card metric-card">
+    <span class="stat-label"> Cross Validation Accuracy </span>
+    <h2>{{ (metrics.cv_roc_auc_mean*100)|round(1) }}%</h2>
+    <p>Average ROC-AUC obtained using 5-Fold Cross Validation.</p>
+  </div>
+
+  <div class="stat-card metric-card">
+    <span class="stat-label"> Decision Threshold </span>
+    <h2>{{ (metrics.decision_threshold*100)|round(1) }}%</h2>
+    <p>Optimized threshold selected after model tuning.</p>
+  </div>
+
+  <div class="stat-card metric-card">
+    <span class="stat-label"> Applications Flagged </span>
+    <h2>{{ (metrics.validation_flag_rate*100)|round(1) }}%</h2>
+    <p>Percentage of applications requiring manual review.</p>
+  </div>
+
+  <div class="stat-card metric-card">
+    <span class="stat-label"> High Risk Dataset </span>
+    <h2>{{ (metrics.positive_rate*100)|round(2) }}%</h2>
+    <p>Actual proportion of high-risk applicants in training data.</p>
+  </div>
+</section>
+
+<section class="workflow-section how-it-works">
+  <div class="section-header section-heading">
+    <h2>Screening Workflow</h2>
+    <p>
+      Every applicant passes through four intelligent stages before a
+      recommendation is generated.
+    </p>
+  </div>
+
+  <div class="workflow-grid steps">
+    <div class="workflow-card step">
+      <div class="workflow-number section-icon">01</div>
+      <h3>Application Intake</h3>
+      <p>
+        Personal, employment and financial information is collected through the
+        digital application form.
+      </p>
+    </div>
+
+    <div class="workflow-card step">
+      <div class="workflow-number section-icon">02</div>
+      <h3>Rule Validation</h3>
+      <p>
+        Mandatory eligibility rules eliminate invalid or impossible applications
+        before machine learning is executed.
+      </p>
+    </div>
+
+    <div class="workflow-card step">
+      <div class="workflow-number section-icon">03</div>
+      <h3>Risk Prediction</h3>
+      <p>
+        The optimized XGBoost classifier predicts the probability of credit
+        default using engineered financial features.
+      </p>
+    </div>
+
+    <div class="workflow-card step">
+      <div class="workflow-number section-icon">04</div>
+      <h3>Explainable Decision</h3>
+      <p>
+        SHAP explanations identify the most influential features responsible for
+        the final prediction.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="section-heading">
+    <h2>Core Features</h2>
+  </div>
+  <div class="feature-grid">
+    <div class="feature feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>Rule Engine</h3>
+      <p>
+        Prevents invalid applications from reaching the prediction model,
+        improving reliability and consistency.
+      </p>
+    </div>
+
+    <div class="feature feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Explainable AI</h3>
+      <p>
+        SHAP based explanations improve transparency by displaying feature-level
+        contributions behind every prediction.
+      </p>
+    </div>
+
+    <div class="feature feature-card">
+      <div class="feature-icon">⚖️</div>
+      <h3>Optimized Threshold</h3>
+      <p>
+        Uses a tuned decision threshold rather than the default 0.50, improving
+        recall for high-risk applicants.
+      </p>
+    </div>
+
+    <div class="feature feature-card">
+      <div class="feature-icon">🧑‍💻</div>
+      <h3>Human Decision Support</h3>
+      <p>
+        Final approval remains with financial analysts while the system
+        prioritizes applications requiring additional investigation.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="information-panel hero-banner">
+  <div class="info-left hero-content">
+    <h2>Why this system?</h2>
+    <p>
+      Financial institutions receive thousands of credit applications every day.
+      Manual verification alone is time-consuming and prone to inconsistency.
+      This platform integrates business rules with explainable machine learning
+      to identify potentially risky applicants faster while maintaining
+      transparency throughout the decision-making process.
+    </p>
+  </div>
+
+  <div class="info-right hero-side">
+    <div class="info-box hero-panel">
+      <h3>Technologies Used</h3>
+      <ul>
+        <li>Python</li>
+        <li>Flask Framework</li>
+        <li>XGBoost Classifier</li>
+        <li>SHAP Explainability</li>
+        <li>Pandas & NumPy</li>
+        <li>Scikit-Learn</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="notice-box disclaimer-box">
+  <h3>Disclaimer</h3>
+  <p>
+    The generated prediction represents an estimated credit risk based on
+    historical applicant behaviour. It is intended to support financial analysts
+    during credit evaluation and should not replace institutional lending
+    policies or expert review.
+  </p>
+</section>
+
+{% endblock %}

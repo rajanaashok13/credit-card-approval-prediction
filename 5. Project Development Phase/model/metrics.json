@@ -1,0 +1,88 @@
+{
+  "comparison_table": [
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.596,
+      "ROC_AUC": 0.577,
+      "F1_high_risk": 0.04
+    },
+    {
+      "Model": "Decision Tree",
+      "Accuracy": 0.826,
+      "ROC_AUC": 0.588,
+      "F1_high_risk": 0.055
+    },
+    {
+      "Model": "Random Forest",
+      "Accuracy": 0.917,
+      "ROC_AUC": 0.687,
+      "F1_high_risk": 0.147
+    },
+    {
+      "Model": "XGBoost (untuned)",
+      "Accuracy": 0.873,
+      "ROC_AUC": 0.71,
+      "F1_high_risk": 0.112
+    },
+    {
+      "Model": "XGBoost (tuned, threshold=0.5)",
+      "Accuracy": 0.954,
+      "ROC_AUC": 0.707,
+      "F1_high_risk": 0.248
+    },
+    {
+      "Model": "XGBoost (tuned, threshold=0.74)",
+      "Accuracy": 0.97,
+      "ROC_AUC": 0.707,
+      "F1_high_risk": 0.273
+    }
+  ],
+  "classification_report": {
+    "0": {
+      "precision": 0.9884750527055517,
+      "recall": 0.981029432277863,
+      "f1-score": 0.9847381685802297,
+      "support": 7169.0
+    },
+    "1": {
+      "precision": 0.23163841807909605,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.2733333333333333,
+      "support": 123.0
+    },
+    "accuracy": 0.9701042238069116,
+    "macro avg": {
+      "precision": 0.6100567353923239,
+      "recall": 0.6571813828055981,
+      "f1-score": 0.6290357509567814,
+      "support": 7292.0
+    },
+    "weighted avg": {
+      "precision": 0.9757088834709036,
+      "recall": 0.9701042238069116,
+      "f1-score": 0.972738333866109,
+      "support": 7292.0
+    }
+  },
+  "cv_roc_auc_mean": 0.7445239526255091,
+  "cv_roc_auc_std": 0.022456416474020396,
+  "decision_threshold": 0.7423259615898132,
+  "validation_flag_rate": 0.023998902907295668,
+  "top_features": {
+    "NAME_INCOME_TYPE_Pensioner": 0.040223367512226105,
+    "NAME_HOUSING_TYPE_Office apartment": 0.03113333135843277,
+    "NAME_FAMILY_STATUS_Widow": 0.027800001204013824,
+    "NAME_FAMILY_STATUS_Separated": 0.026246683672070503,
+    "OCCUPATION_TYPE_Sales staff": 0.02536732517182827,
+    "OCCUPATION_TYPE_High skill tech staff": 0.02508712001144886,
+    "NAME_EDUCATION_TYPE_Incomplete higher": 0.02496657706797123,
+    "OCCUPATION_TYPE_Drivers": 0.024932919070124626,
+    "EMPLOYMENT_STABILITY": 0.024857860058546066,
+    "FLAG_WORK_PHONE": 0.024418501183390617,
+    "LOG_INCOME": 0.024241484701633453,
+    "CNT_FAM_MEMBERS": 0.024095889180898666
+  },
+  "n_train": 29165,
+  "n_test": 7292,
+  "positive_rate": 0.016896617933455853
+}

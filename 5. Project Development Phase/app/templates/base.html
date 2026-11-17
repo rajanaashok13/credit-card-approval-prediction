@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Credit Risk Intelligence{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <!-- ================= Sidebar ================= -->
+      <aside class="sidebar">
+        <div class="logo-section">
+          <div class="logo-icon">CR</div>
+          <div class="logo-text">
+            <h2>Credit Risk</h2>
+            <span>Decision System</span>
+          </div>
+        </div>
+
+        <nav class="side-menu">
+          <a href="{{ url_for('home') }}" class="menu-item">
+            <span class="menu-icon">🏠</span>
+            <span>Dashboard</span>
+          </a>
+          <a href="{{ url_for('predict_form') }}" class="menu-item">
+            <span class="menu-icon">📄</span>
+            <span>New Application</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <h4>System</h4>
+          <p>AI Assisted Credit Risk</p>
+        </div>
+      </aside>
+
+      <!-- ================= Main Area ================= -->
+      <div class="main-container">
+        <!-- Top Header -->
+        <header class="topbar">
+          <div class="page-heading">
+            <h1>Credit Risk Intelligence Platform</h1>
+            <p>Rule Engine + Machine Learning Decision Support</p>
+          </div>
+        </header>
+
+        <!-- Dynamic Page -->
+        <main class="main-content">{% block content %} {% endblock %}</main>
+
+        <!-- Footer -->
+        <footer class="footer">
+          <div class="footer-left">
+            <strong>Credit Risk Intelligence System</strong>
+            <span> Machine Learning Assisted Decision Support Platform </span>
+          </div>
+          <div class="footer-right">
+            <span> Built using Flask • XGBoost • SHAP • Python </span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
